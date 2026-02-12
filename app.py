@@ -24,14 +24,13 @@ def health_check():
 
 
 # -------------------- EMAIL WORKER --------------------
-def send_email_async(subject, body, receiver_email, body_type):
+def send_email_async(subject, body, receiver_email, authority_name, body_type):
     try:
         print("🔥 THREAD STARTED")
         smtp_host = os.getenv("SMTP_HOST")
         smtp_port = int(os.getenv("SMTP_PORT", "465"))
         sender_email = os.getenv("EMAIL_USER")
         sender_pass = os.getenv("EMAIL_PASSWORD")
-        display_name = os.getenv("DISPLAY_NAME", "My App Name")
 
         print(smtp_host, smtp_port, sender_email)
 
@@ -42,7 +41,7 @@ def send_email_async(subject, body, receiver_email, body_type):
         msg = MIMEMultipart("alternative")
         msg["Subject"] = subject
         
-        msg["From"] = formataddr((display_name, sender_email))
+        msg["From"] = formataddr((authority_name, sender_email))
         
         msg["To"] = receiver_email
 
@@ -76,8 +75,8 @@ def send_mail():
 
     data = request.get_json()
 
-    # REQUIRED FIELDS
-    required_fields = ["subject", "body", "receiver_email", "body_type"]
+
+    required_fields = ["subject", "body", "receiver_email","authority_name", "body_type"]
     missing = [f for f in required_fields if not data.get(f)]
     if missing:
         return jsonify({"error": "Missing fields", "fields": missing}), 400
@@ -85,6 +84,7 @@ def send_mail():
     subject = data["subject"].strip()
     body = data["body"].strip()
     receiver_email = data["receiver_email"].strip()
+    authority_name = data["authority_name"].strip()
     body_type = data["body_type"].strip().lower()
 
     if body_type not in ("html", "text"):
@@ -93,7 +93,7 @@ def send_mail():
     # 🚀 FIRE & FORGET
     thread = threading.Thread(
         target=send_email_async,
-        args=(subject, body, receiver_email, body_type)
+        args=(subject, body, receiver_email,authority_name, body_type)
     )
     thread.start()
 
@@ -106,18 +106,18 @@ def send_mail():
 
 # -------------------- RUN APP --------------------
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8080))
-    print(f"🚀 Email service starting on port {port}...")
-    app.run(
-        host="0.0.0.0", 
-        port=port, 
-        debug=False
-    )
-    
-    # print("🚀 Starting email service")
+    # port = int(os.environ.get("PORT", 8080))
+    # print(f"🚀 Email service starting on port {port}...")
     # app.run(
-    #     host="127.0.0.1",
-    #     port=5001,
-    #     debug=False,
-    #     threaded=True
+    #     host="0.0.0.0", 
+    #     port=port, 
+    #     debug=False
     # )
+    
+    print("🚀 Starting email service")
+    app.run(
+        host="127.0.0.1",
+        port=5001,
+        debug=False,
+        threaded=True
+    )
