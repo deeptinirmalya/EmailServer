@@ -106,18 +106,18 @@ def send_mail():
 
 # -------------------- RUN APP --------------------
 if __name__ == "__main__":
-    # port = int(os.environ.get("PORT", 8080))
-    # print(f"🚀 Email service starting on port {port}...")
-    # app.run(
-    #     host="0.0.0.0", 
-    #     port=port, 
-    #     debug=False
-    # )
-    
-    print("🚀 Starting email service")
+    port = int(os.environ.get("PORT", 8080))
+    print(f"🚀 Email service starting on port {port}...")
     app.run(
-        host="127.0.0.1",
-        port=5001,
-        debug=False,
-        threaded=True
+        host="0.0.0.0", 
+        port=port, 
+        debug=False
     )
+    
+    # print("🚀 Starting email service")
+    # app.run(
+    #     host="127.0.0.1",
+    #     port=5001,
+    #     debug=False,
+    #     threaded=True
+    # )
