@@ -49,9 +49,11 @@ def send_email_async(subject, body, receiver_email, body_type):
         mime_type = "html" if body_type == "html" else "plain"
         msg.attach(MIMEText(body, mime_type, "utf-8"))
 
-        with smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=10) as server:
+        with smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=15) as server:
+            server.set_debuglevel(1)
             server.login(sender_email, sender_pass)
             server.sendmail(sender_email, receiver_email, msg.as_string())
+            server.quit()
 
         print(f"✅ Email sent Successfully")
 
@@ -104,10 +106,18 @@ def send_mail():
 
 # -------------------- RUN APP --------------------
 if __name__ == "__main__":
-    print("🚀 Starting email service")
+    port = int(os.environ.get("PORT", 8080))
+    print(f"🚀 Email service starting on port {port}...")
     app.run(
-        host="127.0.0.1",
-        port=5001,
-        debug=False,
-        threaded=True
+        host="0.0.0.0", 
+        port=port, 
+        debug=False
     )
+    
+    # print("🚀 Starting email service")
+    # app.run(
+    #     host="127.0.0.1",
+    #     port=5001,
+    #     debug=False,
+    #     threaded=True
+    # )
