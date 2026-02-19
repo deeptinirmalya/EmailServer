@@ -39,6 +39,16 @@ def background_send_email(subject, receiver_email, body, authority_name, body_ty
         except Exception as e:
             print(f"Error sending email: {str(e)}")
 
+
+@app.route('/health', methods=['GET'])
+def health_check():
+    return {
+        "status": "running",
+        "message": "Email server is active",
+        "environment": "production"
+    }, 200
+
+
 @app.route("/send-email", methods=["POST"])
 def send_mail_route():
 
