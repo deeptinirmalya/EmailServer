@@ -1,0 +1,8 @@
+Flask==3.1.x
+flask-cors==4.0.x
+python-dotenv==1.0.1
+requests==2.32.x
+flask-executor==1.0.0
+flask-mailman==1.1.x
+email-validator==2.1.x
+gunicorn==23.0.0
