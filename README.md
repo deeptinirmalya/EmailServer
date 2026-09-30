@@ -54,6 +54,11 @@ Queue an email for delivery.
 {
     "subject": "Welcome to the Platform!",
     "body": "<h1>Hello!</h1><p>Your account is ready.</p>",
-    "receiver_email": "user@example.com",
+    "receiver_email": ["user@example.com", "another@example.com"],
+    "cc": ["copy@example.com"],
+    "bcc": ["hidden-copy@example.com"],
     "body_type": "html"
 }
+  ```
+
+  `receiver_email` accepts a list of addresses; a single string is still accepted for backward compatibility. `cc` and `bcc` are optional and default to empty lists. The combined number of To, Cc, and Bcc recipients cannot exceed 500 per request.
